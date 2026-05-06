@@ -27,13 +27,13 @@ jobs:
       - name: Resolve Packages
         run: |
           xcodebuild -resolvePackageDependencies \
-            -project Shelv/Shelv.xcodeproj \
+            -project Shelv.xcodeproj \
             -scheme Shelv
 
       - name: Build Archive
         run: |
           xcodebuild archive \
-            -project Shelv/Shelv.xcodeproj \
+            -project Shelv.xcodeproj \
             -scheme Shelv \
             -configuration Release \
             -archivePath $PWD/build/Shelv.xcarchive \
