@@ -94,7 +94,7 @@ struct ArtistDetailView: View {
                 listBody
             }
         }
-        .searchable(text: $searchQuery, prompt: tr("Search albums…", "Alben suchen…"))
+        .searchable(text: $searchQuery, prompt: tr("Search albums…", "Alben suchen…", "搜索专辑…"))
         .navigationTitle(artist.name)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -114,30 +114,30 @@ struct ArtistDetailView: View {
         }
         .shelveToast($currentToast)
         .alert(
-            tr("Delete Downloads?", "Downloads löschen?"),
+            tr("Delete Downloads?", "Downloads löschen?", "删除下载？"),
             isPresented: Binding(get: { albumToDeleteDownloads != nil }, set: { if !$0 { albumToDeleteDownloads = nil } }),
             presenting: albumToDeleteDownloads
         ) { album in
-            Button(tr("Delete", "Löschen"), role: .destructive) {
+            Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                 downloadStore.deleteAlbum(album.id)
             }
-            Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+            Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
         } message: { _ in
-            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
         }
         .alert(
-            tr("Delete Downloads?", "Downloads löschen?"),
+            tr("Delete Downloads?", "Downloads löschen?", "删除下载？"),
             isPresented: $showDeleteArtistDownloadConfirm
         ) {
-            Button(tr("Delete", "Löschen"), role: .destructive) {
+            Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                 if let match = downloadStore.artists.first(where: { $0.name == artist.name }) {
                     downloadStore.deleteArtist(match.artistId)
                 }
-                currentToast = ShelveToast(message: tr("Downloads deleted", "Downloads gelöscht"))
+                currentToast = ShelveToast(message: tr("Downloads deleted", "Downloads gelöscht", "下载已删除"))
             }
-            Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+            Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
         } message: {
-            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
         }
         .onChange(of: offlineMode.isOffline) { _, isOffline in
             if isOffline && sortOption.requiresServer {
@@ -163,7 +163,7 @@ struct ArtistDetailView: View {
                     Text(artist.name)
                         .font(.title2).bold()
                     if let count = detail?.albumCount ?? artist.albumCount {
-                        Text("\(count) \(tr("Albums", "Alben"))")
+                        Text("\(count) \(tr("Albums", "Alben", "专辑"))")
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
@@ -177,7 +177,7 @@ struct ArtistDetailView: View {
                                 player.play(songs: songs, startIndex: 0)
                             }
                         } label: {
-                            Label(tr("Play", "Abspielen"), systemImage: "play.fill")
+                            Label(tr("Play", "Abspielen", "播放"), systemImage: "play.fill")
                                 .labelStyle(.titleAndIcon)
                                 .font(.body).bold()
                                 .foregroundStyle(.white)
@@ -198,7 +198,7 @@ struct ArtistDetailView: View {
                                 player.playShuffled(songs: songs)
                             }
                         } label: {
-                            Label(tr("Shuffle", "Zufällig"), systemImage: "shuffle")
+                            Label(tr("Shuffle", "Zufällig", "随机播放"), systemImage: "shuffle")
                                 .labelStyle(.titleAndIcon)
                                 .font(.body).bold()
                                 .foregroundStyle(accentColor)
@@ -239,7 +239,7 @@ struct ArtistDetailView: View {
                         .padding(.top, 40)
                         .frame(maxWidth: .infinity)
                 } else if !sortedAlbums.isEmpty {
-                    Text(tr("Albums", "Alben"))
+                    Text(tr("Albums", "Alben", "专辑"))
                         .font(.title3).bold()
                         .padding(.horizontal)
 
@@ -322,7 +322,7 @@ struct ArtistDetailView: View {
                     }
                 } header: {
                     HStack {
-                        Text(tr("Albums", "Alben"))
+                        Text(tr("Albums", "Alben", "专辑"))
                             .font(.title3).bold()
                             .textCase(nil)
                             .foregroundStyle(.primary)
@@ -355,7 +355,7 @@ struct ArtistDetailView: View {
             guard !songs.isEmpty else { return }
             await MainActor.run {
                 player.addToQueue(songs)
-                currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
             }
         }
     }
@@ -366,7 +366,7 @@ struct ArtistDetailView: View {
             guard !songs.isEmpty else { return }
             await MainActor.run {
                 player.addPlayNext(songs)
-                currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
             }
         }
     }
@@ -438,10 +438,10 @@ struct ArtistDetailView: View {
                     let songs = await fetchAllSongs(from: albums)
                     guard !songs.isEmpty else { return }
                     player.addPlayNext(songs)
-                    currentToast = ShelveToast(message: tr("Added as next", "Als nächstes"))
+                    currentToast = ShelveToast(message: tr("Added as next", "Als nächstes", "将下一个播放"))
                 }
             } label: {
-                Label(tr("Play Next", "Als nächstes"), systemImage: "text.insert")
+                Label(tr("Play Next", "Als nächstes", "下一个播放"), systemImage: "text.insert")
             }
             .disabled(isLoading)
 
@@ -452,10 +452,10 @@ struct ArtistDetailView: View {
                     let songs = await fetchAllSongs(from: albums)
                     guard !songs.isEmpty else { return }
                     player.addToQueue(songs)
-                    currentToast = ShelveToast(message: tr("Added to queue", "Zur Warteschlange"))
+                    currentToast = ShelveToast(message: tr("Added to queue", "Zur Warteschlange", "已添加到播放队列"))
                 }
             } label: {
-                Label(tr("Add to Queue", "Zur Warteschlange"), systemImage: "text.badge.plus")
+                Label(tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), systemImage: "text.badge.plus")
             }
             .disabled(isLoading)
 
@@ -469,7 +469,7 @@ struct ArtistDetailView: View {
                         NotificationCenter.default.post(name: .addSongsToPlaylist, object: songs.map(\.id))
                     }
                 } label: {
-                    Label(tr("Add to Playlist…", "Zur Playlist hinzufügen…"), systemImage: "music.note.list")
+                    Label(tr("Add to Playlist…", "Zur Playlist hinzufügen…", "添加到播放列表…"), systemImage: "music.note.list")
                 }
                 .disabled(isLoading)
             }
@@ -478,7 +478,7 @@ struct ArtistDetailView: View {
 
             Button { isGrid.toggle() } label: {
                 Label(
-                    isGrid ? tr("List view", "Listenansicht") : tr("Grid view", "Rasteransicht"),
+                    isGrid ? tr("List view", "Listenansicht", "列表视图") : tr("Grid view", "Rasteransicht", "网格视图"),
                     systemImage: isGrid ? "list.bullet" : "square.grid.2x2"
                 )
             }
@@ -502,7 +502,7 @@ struct ArtistDetailView: View {
                     .pickerStyle(.inline)
                 }
             } label: {
-                Label(tr("Sort", "Sortieren"), systemImage: "arrow.up.arrow.down")
+                Label(tr("Sort", "Sortieren", "排序"), systemImage: "arrow.up.arrow.down")
             }
         } label: {
             Image(systemName: "ellipsis.circle")
@@ -585,9 +585,9 @@ struct ArtistDetailView: View {
                     Button {
                         haptic()
                         Task { await DownloadService.shared.enqueueArtist(artist: artist, serverId: serverStableId()) }
-                        currentToast = ShelveToast(message: tr("Download started", "Download gestartet"))
+                        currentToast = ShelveToast(message: tr("Download started", "Download gestartet", "下载已开始"))
                     } label: {
-                        Label(tr("Download", "Herunterladen"), systemImage: "arrow.down.circle")
+                        Label(tr("Download", "Herunterladen", "下载"), systemImage: "arrow.down.circle")
                             .font(.subheadline).bold()
                             .foregroundStyle(accentColor)
                             .frame(maxWidth: .infinity)
@@ -602,9 +602,9 @@ struct ArtistDetailView: View {
                     Button {
                         haptic()
                         Task { await DownloadService.shared.enqueueArtist(artist: artist, serverId: serverStableId()) }
-                        currentToast = ShelveToast(message: tr("Download started", "Download gestartet"))
+                        currentToast = ShelveToast(message: tr("Download started", "Download gestartet", "下载已开始"))
                     } label: {
-                        Label(tr("Rest (\(tot - done))", "Rest (\(tot - done))"), systemImage: "arrow.down.circle")
+                        Label(tr("Rest (\(tot - done))", "Rest (\(tot - done))", "剩余 (\(tot - done))"), systemImage: "arrow.down.circle")
                             .font(.subheadline).bold()
                             .foregroundStyle(accentColor)
                             .frame(maxWidth: .infinity)
@@ -617,7 +617,7 @@ struct ArtistDetailView: View {
                 Button {
                     haptic(); showDeleteArtistDownloadConfirm = true
                 } label: {
-                    Label(tr("Delete", "Löschen"), systemImage: "arrow.down.circle")
+                    Label(tr("Delete", "Löschen", "删除"), systemImage: "arrow.down.circle")
                         .font(.subheadline).bold()
                         .foregroundStyle(.red)
                         .frame(maxWidth: .infinity)
@@ -630,7 +630,7 @@ struct ArtistDetailView: View {
                 Button {
                     haptic(); showDeleteArtistDownloadConfirm = true
                 } label: {
-                    Label(tr("Delete Downloads", "Downloads löschen"), systemImage: "arrow.down.circle")
+                    Label(tr("Delete Downloads", "Downloads löschen", "删除下载"), systemImage: "arrow.down.circle")
                         .font(.subheadline).bold()
                         .foregroundStyle(.red)
                         .frame(maxWidth: .infinity)

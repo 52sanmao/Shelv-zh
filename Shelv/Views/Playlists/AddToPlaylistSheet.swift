@@ -26,13 +26,13 @@ struct AddToPlaylistSheet: View {
                         newPlaylistName = ""
                         showCreateSheet = true
                     } label: {
-                        Label(tr("New Playlist…", "Neue Playlist…"), systemImage: "plus.circle")
+                        Label(tr("New Playlist…", "Neue Playlist…", "新建播放列表…"), systemImage: "plus.circle")
                             .foregroundStyle(accentColor)
                     }
                 }
 
                 if !visiblePlaylists.isEmpty {
-                    Section(tr("Add to Playlist", "Zu Playlist hinzufügen")) {
+                    Section(tr("Add to Playlist", "Zu Playlist hinzufügen", "添加到播放列表")) {
                         ForEach(visiblePlaylists) { playlist in
                             Button {
                                 guard addingToPlaylistId == nil else { return }
@@ -40,7 +40,7 @@ struct AddToPlaylistSheet: View {
                                 Task {
                                     await libraryStore.addSongsToPlaylist(playlist, songIds: songIds)
                                     addingToPlaylistId = nil
-                                    toast = ShelveToast(message: tr("Added to \"\(playlist.name)\"", "Zu \"\(playlist.name)\" hinzugefügt"))
+                                    toast = ShelveToast(message: tr("Added to \"\(playlist.name)\"", "Zu \"\(playlist.name)\" hinzugefügt", "已添加到「\(playlist.name)」"))
                                     try? await Task.sleep(for: .milliseconds(1200))
                                     dismiss()
                                 }
@@ -53,7 +53,7 @@ struct AddToPlaylistSheet: View {
                                             .font(.body)
                                             .foregroundStyle(.primary)
                                         if let count = playlist.songCount {
-                                            Text("\(count) \(tr("Songs", "Titel"))")
+                                            Text("\(count) \(tr("Songs", "Titel", "歌曲"))")
                                                 .font(.caption)
                                                 .foregroundStyle(.secondary)
                                         }
@@ -72,11 +72,11 @@ struct AddToPlaylistSheet: View {
                 }
             }
             .listStyle(.insetGrouped)
-            .navigationTitle(tr("Add to Playlist", "Zu Playlist hinzufügen"))
+            .navigationTitle(tr("Add to Playlist", "Zu Playlist hinzufügen", "添加到播放列表"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(tr("Cancel", "Abbrechen"), role: .cancel) { dismiss() }
+                    Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) { dismiss() }
                 }
             }
             .task {
@@ -95,22 +95,22 @@ struct AddToPlaylistSheet: View {
     private var createAndAddSheet: some View {
         NavigationStack {
             Form {
-                Section(tr("Name", "Name")) {
-                    TextField(tr("My Playlist", "Meine Playlist"), text: $newPlaylistName)
+                Section(tr("Name", "Name", "名称")) {
+                    TextField(tr("My Playlist", "Meine Playlist", "我的播放列表"), text: $newPlaylistName)
                         .focused($nameFieldFocused)
                         .autocorrectionDisabled()
                 }
             }
-            .navigationTitle(tr("New Playlist", "Neue Playlist"))
+            .navigationTitle(tr("New Playlist", "Neue Playlist", "新建播放列表"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
-                    Button(tr("Cancel", "Abbrechen"), role: .cancel) {
+                    Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {
                         showCreateSheet = false
                     }
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    Button(tr("Create & Add", "Erstellen & Hinzufügen")) {
+                    Button(tr("Create & Add", "Erstellen & Hinzufügen", "创建并添加")) {
                         let name = newPlaylistName.trimmingCharacters(in: .whitespaces)
                         guard !name.isEmpty else { return }
                         showCreateSheet = false

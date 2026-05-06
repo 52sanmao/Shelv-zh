@@ -82,7 +82,8 @@ struct SearchView: View {
                             .foregroundStyle(.secondary)
                         Text(tr(
                             "Search for artists, albums or songs",
-                            "Künstler, Alben oder Titel suchen"
+                            "Künstler, Alben oder Titel suchen",
+                            "搜索艺术家、专辑或歌曲"
                         ))
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
@@ -98,7 +99,7 @@ struct SearchView: View {
                 } else {
                     List {
                         if let artists = result?.artist.map({ $0.filter { ($0.albumCount ?? 0) > 0 } }), !artists.isEmpty {
-                            Section(tr("Artists", "Künstler")) {
+                            Section(tr("Artists", "Künstler", "艺术家")) {
                                 ForEach(artists) { artist in
                                     NavigationLink(destination: ArtistDetailView(artist: artist)) {
                                         HStack(spacing: 12) {
@@ -168,7 +169,7 @@ struct SearchView: View {
                         }
 
                         if let albums = result?.album, !albums.isEmpty {
-                            Section(tr("Albums", "Alben")) {
+                            Section(tr("Albums", "Alben", "专辑")) {
                                 ForEach(albums) { album in
                                     NavigationLink(destination: AlbumDetailView(album: album)) {
                                         HStack(spacing: 12) {
@@ -228,7 +229,7 @@ struct SearchView: View {
                         }
 
                         if let songs = result?.song, !songs.isEmpty {
-                            Section(tr("Songs", "Titel")) {
+                            Section(tr("Songs", "Titel", "歌曲")) {
                                 ForEach(songs) { song in
                                     Button {
                                         player.playSong(song)
@@ -265,15 +266,15 @@ struct SearchView: View {
                                     .contextMenu {
                                         Button {
                                             player.playSong(song)
-                                        } label: { Label(tr("Play", "Abspielen"), systemImage: "play.fill") }
+                                        } label: { Label(tr("Play", "Abspielen", "播放"), systemImage: "play.fill") }
                                         Button {
                                             player.addPlayNext(song)
-                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
-                                        } label: { Label(tr("Play Next", "Als nächstes"), systemImage: "text.insert") }
+                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
+                                        } label: { Label(tr("Play Next", "Als nächstes", "下一个播放"), systemImage: "text.insert") }
                                         Button {
                                             player.addToQueue(song)
-                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
-                                        } label: { Label(tr("Add to Queue", "Zur Warteschlange"), systemImage: "text.badge.plus") }
+                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
+                                        } label: { Label(tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), systemImage: "text.badge.plus") }
                                         if !offlineMode.isOffline && (enableFavorites || enablePlaylists) {
                                             Divider()
                                             if enableFavorites {
@@ -282,8 +283,8 @@ struct SearchView: View {
                                                 } label: {
                                                     Label(
                                                         libraryStore.isSongStarred(song)
-                                                            ? tr("Unfavorite", "Aus Favoriten entfernen")
-                                                            : tr("Favorite", "Zu Favoriten"),
+                                                            ? tr("Unfavorite", "Aus Favoriten entfernen", "取消收藏")
+                                                            : tr("Favorite", "Zu Favoriten", "收藏"),
                                                         systemImage: libraryStore.isSongStarred(song) ? "heart.slash" : "heart"
                                                     )
                                                 }
@@ -293,7 +294,7 @@ struct SearchView: View {
                                                     playlistSongIds = [song.id]
                                                     showAddToPlaylist = true
                                                 } label: {
-                                                    Label(tr("Add to Playlist…", "Zur Playlist hinzufügen…"), systemImage: "music.note.list")
+                                                    Label(tr("Add to Playlist…", "Zur Playlist hinzufügen…", "添加到播放列表…"), systemImage: "music.note.list")
                                                 }
                                             }
                                         }
@@ -301,12 +302,12 @@ struct SearchView: View {
                                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                         Button {
                                             haptic(); player.addToQueue(song)
-                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
                                         } label: { Image(systemName: "text.badge.plus") }
                                         .tint(accentColor)
                                         Button {
                                             haptic(); player.addPlayNext(song)
-                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
                                         } label: { Image(systemName: "text.insert") }
                                         .tint(.orange)
                                         if enableDownloads {
@@ -346,7 +347,7 @@ struct SearchView: View {
                             }
                         }
                         if !lyricsResults.isEmpty {
-                            Section(tr("Lyrics", "Lyrics")) {
+                            Section(tr("Lyrics", "Lyrics", "歌词")) {
                                 ForEach(lyricsResults) { item in
                                     Button {
                                         playLyricsResult(item)
@@ -361,7 +362,7 @@ struct SearchView: View {
                                                     )
                                                 }
                                             VStack(alignment: .leading, spacing: 2) {
-                                                Text(item.songTitle ?? tr("Unknown Song", "Unbekannter Titel"))
+                                                Text(item.songTitle ?? tr("Unknown Song", "Unbekannter Titel", "未知歌曲"))
                                                     .font(.body)
                                                     .foregroundStyle(item.songTitle != nil ? Color.primary : Color.secondary)
                                                 if let artist = item.artistName {
@@ -398,7 +399,7 @@ struct SearchView: View {
                                                 starred: nil, suffix: nil, bitRate: nil
                                             )
                                             haptic(); player.addToQueue(song)
-                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
                                         } label: { Image(systemName: "text.badge.plus") }
                                         .tint(accentColor)
                                         Button {
@@ -411,7 +412,7 @@ struct SearchView: View {
                                                 starred: nil, suffix: nil, bitRate: nil
                                             )
                                             haptic(); player.addPlayNext(song)
-                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
                                         } label: { Image(systemName: "text.insert") }
                                         .tint(.orange)
                                         if enableDownloads {
@@ -477,7 +478,7 @@ struct SearchView: View {
                         }
 
                         if hasFavoriteResults {
-                            Section(tr("Favorites", "Favoriten")) {
+                            Section(tr("Favorites", "Favoriten", "收藏")) {
                                 ForEach(matchedFavoriteArtists) { artist in
                                     NavigationLink(destination: ArtistDetailView(artist: artist)) {
                                         HStack(spacing: 12) {
@@ -555,12 +556,12 @@ struct SearchView: View {
                                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                         Button {
                                             haptic(); player.addToQueue(song)
-                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                                            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
                                         } label: { Image(systemName: "text.badge.plus") }
                                         .tint(accentColor)
                                         Button {
                                             haptic(); player.addPlayNext(song)
-                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                                            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
                                         } label: { Image(systemName: "text.insert") }
                                         .tint(.orange)
                                     }
@@ -579,11 +580,11 @@ struct SearchView: View {
                     .scrollIndicators(.hidden)
                 }
             }
-            .navigationTitle(tr("Search", "Suchen"))
+            .navigationTitle(tr("Search", "Suchen", "搜索"))
             .searchable(
                 text: $query,
                 isPresented: $searchFieldActive,
-                prompt: tr("Artists, albums, songs...", "Künstler, Alben, Titel...")
+                prompt: tr("Artists, albums, songs...", "Künstler, Alben, Titel...", "搜索艺术家、专辑、歌曲...")
             )
             .onChange(of: query) { _, newValue in
                 searchTask?.cancel()
@@ -600,33 +601,33 @@ struct SearchView: View {
             }
             .shelveToast($currentToast)
             .alert(
-                tr("Delete Downloads?", "Downloads löschen?"),
+                tr("Delete Downloads?", "Downloads löschen?", "删除下载？"),
                 isPresented: Binding(get: { artistToDeleteDownloads != nil }, set: { if !$0 { artistToDeleteDownloads = nil } }),
                 presenting: artistToDeleteDownloads
             ) { artist in
-                Button(tr("Delete", "Löschen"), role: .destructive) {
+                Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                     if let match = downloadStore.artists.first(where: { $0.name == artist.name }) {
                         downloadStore.deleteArtist(match.artistId)
                     }
                 }
-                Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+                Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
             } message: { _ in
-                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
             }
             .alert(
-                tr("Delete Downloads?", "Downloads löschen?"),
+                tr("Delete Downloads?", "Downloads löschen?", "删除下载？"),
                 isPresented: Binding(get: { albumToDeleteDownloads != nil }, set: { if !$0 { albumToDeleteDownloads = nil } }),
                 presenting: albumToDeleteDownloads
             ) { album in
-                Button(tr("Delete", "Löschen"), role: .destructive) {
+                Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                     downloadStore.deleteAlbum(album.id)
                 }
-                Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+                Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
             } message: { _ in
-                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
             }
-            .alert(tr("Error", "Fehler"), isPresented: $showError, presenting: errorMessage) { _ in
-                Button(tr("OK", "OK"), role: .cancel) {}
+            .alert(tr("Error", "Fehler", "错误"), isPresented: $showError, presenting: errorMessage) { _ in
+                Button(tr("OK", "OK", "好"), role: .cancel) {}
             } message: { msg in
                 Text(msg)
             }
@@ -643,7 +644,7 @@ struct SearchView: View {
             let songs = await libraryStore.fetchAllSongs(for: artist)
             guard !songs.isEmpty else { return }
             player.addToQueue(songs)
-            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
         }
     }
 
@@ -652,7 +653,7 @@ struct SearchView: View {
             let songs = await libraryStore.fetchAllSongs(for: artist)
             guard !songs.isEmpty else { return }
             player.addPlayNext(songs)
-            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
         }
     }
 
@@ -662,7 +663,7 @@ struct SearchView: View {
                 let songs = try await libraryStore.fetchAlbumSongs(album)
                 guard !songs.isEmpty else { return }
                 player.addToQueue(songs)
-                currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
             } catch {
                 errorMessage = error.localizedDescription
                 showError = true
@@ -676,7 +677,7 @@ struct SearchView: View {
                 let songs = try await libraryStore.fetchAlbumSongs(album)
                 guard !songs.isEmpty else { return }
                 player.addPlayNext(songs)
-                currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
             } catch {
                 errorMessage = error.localizedDescription
                 showError = true

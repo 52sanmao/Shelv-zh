@@ -29,13 +29,13 @@ struct AlbumContextMenuModifier: ViewModifier {
                     .environmentObject(libraryStore)
                     .tint(AppTheme.color(for: themeColorName))
             }
-            .alert(tr("Delete Downloads?", "Downloads löschen?"), isPresented: $showDeleteAlbumDownloadConfirm) {
-                Button(tr("Delete", "Löschen"), role: .destructive) {
+            .alert(tr("Delete Downloads?", "Downloads löschen?", "删除下载？"), isPresented: $showDeleteAlbumDownloadConfirm) {
+                Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                     DownloadStore.shared.deleteAlbum(album.id)
                 }
-                Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+                Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
             } message: {
-                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
             }
         } else {
             content.contextMenu { menuItems }
@@ -44,13 +44,13 @@ struct AlbumContextMenuModifier: ViewModifier {
                     .environmentObject(libraryStore)
                     .tint(AppTheme.color(for: themeColorName))
             }
-            .alert(tr("Delete Downloads?", "Downloads löschen?"), isPresented: $showDeleteAlbumDownloadConfirm) {
-                Button(tr("Delete", "Löschen"), role: .destructive) {
+            .alert(tr("Delete Downloads?", "Downloads löschen?", "删除下载？"), isPresented: $showDeleteAlbumDownloadConfirm) {
+                Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                     DownloadStore.shared.deleteAlbum(album.id)
                 }
-                Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+                Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
             } message: {
-                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+                Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
             }
         }
     }
@@ -63,7 +63,7 @@ struct AlbumContextMenuModifier: ViewModifier {
                 AudioPlayerService.shared.play(songs: songs, startIndex: 0)
             }
         } label: {
-            Label(tr("Play", "Abspielen"), systemImage: "play.fill")
+            Label(tr("Play", "Abspielen", "播放"), systemImage: "play.fill")
         }
 
         Button {
@@ -72,7 +72,7 @@ struct AlbumContextMenuModifier: ViewModifier {
                 AudioPlayerService.shared.playShuffled(songs: songs)
             }
         } label: {
-            Label(tr("Shuffle", "Zufällig"), systemImage: "shuffle")
+            Label(tr("Shuffle", "Zufällig", "随机播放"), systemImage: "shuffle")
         }
 
         Divider()
@@ -83,7 +83,7 @@ struct AlbumContextMenuModifier: ViewModifier {
                 AudioPlayerService.shared.addPlayNext(songs)
             }
         } label: {
-            Label(tr("Play Next", "Als nächstes"), systemImage: "text.insert")
+            Label(tr("Play Next", "Als nächstes", "下一个播放"), systemImage: "text.insert")
         }
 
         Button {
@@ -92,7 +92,7 @@ struct AlbumContextMenuModifier: ViewModifier {
                 AudioPlayerService.shared.addToQueue(songs)
             }
         } label: {
-            Label(tr("Add to Queue", "Zur Warteschlange"), systemImage: "text.badge.plus")
+            Label(tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), systemImage: "text.badge.plus")
         }
 
         if !offlineMode.isOffline && (enableFavorites || enablePlaylists) {
@@ -103,8 +103,8 @@ struct AlbumContextMenuModifier: ViewModifier {
                 } label: {
                     Label(
                         libraryStore.isAlbumStarred(album)
-                            ? tr("Unfavorite", "Aus Favoriten entfernen")
-                            : tr("Favorite", "Zu Favoriten"),
+                            ? tr("Unfavorite", "Aus Favoriten entfernen", "取消收藏")
+                            : tr("Favorite", "Zu Favoriten", "收藏"),
                         systemImage: libraryStore.isAlbumStarred(album) ? "heart.slash" : "heart"
                     )
                 }
@@ -120,7 +120,7 @@ struct AlbumContextMenuModifier: ViewModifier {
                         }
                     }
                 } label: {
-                    Label(tr("Add to Playlist…", "Zur Playlist hinzufügen…"), systemImage: "music.note.list")
+                    Label(tr("Add to Playlist…", "Zur Playlist hinzufügen…", "添加到播放列表…"), systemImage: "music.note.list")
                 }
             }
         }
@@ -143,7 +143,7 @@ struct AlbumContextMenuModifier: ViewModifier {
                 Button {
                     DownloadStore.shared.enqueueAlbum(album)
                 } label: {
-                    Label(tr("Download Album", "Album herunterladen"),
+                    Label(tr("Download Album", "Album herunterladen", "下载专辑"),
                           systemImage: "arrow.down.circle")
                 }
             }
@@ -152,20 +152,20 @@ struct AlbumContextMenuModifier: ViewModifier {
                 Button {
                     DownloadStore.shared.enqueueAlbum(album)
                 } label: {
-                    Label(tr("Download Remaining", "Rest herunterladen"),
+                    Label(tr("Download Remaining", "Rest herunterladen", "下载剩余"),
                           systemImage: "arrow.down.circle")
                 }
             }
             Button(role: .destructive) {
                 showDeleteAlbumDownloadConfirm = true
             } label: {
-                Label { Text(tr("Delete Downloads", "Downloads löschen")) } icon: { DeleteDownloadIcon(tint: .red) }
+                Label { Text(tr("Delete Downloads", "Downloads löschen", "删除下载")) } icon: { DeleteDownloadIcon(tint: .red) }
             }
         case .complete:
             Button(role: .destructive) {
                 showDeleteAlbumDownloadConfirm = true
             } label: {
-                Label { Text(tr("Delete Downloads", "Downloads löschen")) } icon: { DeleteDownloadIcon(tint: .red) }
+                Label { Text(tr("Delete Downloads", "Downloads löschen", "删除下载")) } icon: { DeleteDownloadIcon(tint: .red) }
             }
         }
     }

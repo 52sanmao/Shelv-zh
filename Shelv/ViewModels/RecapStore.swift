@@ -180,7 +180,7 @@ class RecapStore: ObservableObject {
             await PlayLogService.shared.cleanupImportRollback()
 
             syncReports = [RecapSyncReport(
-                message: tr("Import finished", "Import abgeschlossen"),
+                message: tr("Import finished", "Import abgeschlossen", "导入完成"),
                 isError: false
             )]
             showSyncReport = true
@@ -337,7 +337,7 @@ class RecapStore: ObservableObject {
                         let notFound = expected.filter { !addedIds.contains($0) }
                         for songId in notFound {
                             reports.append(RecapSyncReport(
-                                message: tr("Song not found on server: \(songId)", "Song nicht gefunden: \(songId)"),
+                                message: tr("Song not found on server: \(songId)", "Song nicht gefunden: \(songId)", "服务器上未找到歌曲：\(songId)"),
                                 isError: true
                             ))
                         }
@@ -418,7 +418,7 @@ class RecapStore: ObservableObject {
 
         if reports.isEmpty {
             reports.append(RecapSyncReport(
-                message: tr("All playlists up to date", "Alle Playlists aktuell"),
+                message: tr("All playlists up to date", "Alle Playlists aktuell", "所有播放列表已是最新"),
                 isError: false
             ))
         }

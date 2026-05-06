@@ -81,7 +81,7 @@ class AudioPlayerService: ObservableObject {
     }
 
     var displayTitle: String {
-        currentSong?.title ?? tr("No Track", "Kein Titel")
+        currentSong?.title ?? tr("No Track", "Kein Titel", "暂无曲目")
     }
 
     private var truthAlbumQueue: [Song] = []

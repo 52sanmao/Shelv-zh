@@ -48,7 +48,7 @@ struct RecapView: View {
                 } else if enabledTypes.isEmpty {
                     emptyStateView(
                         icon: "chart.bar.xaxis",
-                        message: tr("Enable at least one period in Settings.", "Aktiviere mindestens eine Periode in den Einstellungen.")
+                        message: tr("Enable at least one period in Settings.", "Aktiviere mindestens eine Periode in den Einstellungen.", "请在设置中至少启用一个周期。")
                     )
                 } else {
                     if enabledTypes.count > 1 {
@@ -65,7 +65,7 @@ struct RecapView: View {
                     if filteredEntries.isEmpty {
                         emptyStateView(
                             icon: "clock",
-                            message: tr("No recap generated yet for this period.", "Noch kein Recap für diese Periode erstellt.")
+                            message: tr("No recap generated yet for this period.", "Noch kein Recap für diese Periode erstellt.", "该时段暂无已生成的回顾。")
                         )
                     } else {
                         List {
@@ -117,7 +117,7 @@ struct RecapView: View {
                     }
                 }
             }
-            .navigationTitle(tr("Recap", "Recap"))
+            .navigationTitle(tr("Recap", "Recap", "年度回顾"))
             .navigationBarTitleDisplayMode(.large)
             .toolbarBackground(.hidden, for: .navigationBar)
             .toolbar {
@@ -134,23 +134,23 @@ struct RecapView: View {
         .tint(accentColor)
         .shelveToast($currentToast)
         .alert(
-            tr("Delete Recap?", "Recap löschen?"),
+            tr("Delete Recap?", "Recap löschen?", "删除回顾？"),
             isPresented: $showDeleteConfirm,
             presenting: entryToDelete
         ) { entry in
-            Button(tr("Delete", "Löschen"), role: .destructive) {
+            Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                 guard let sid = serverStore.activeServer?.stableId else { return }
                 Task {
                     do {
                         try await recapStore.deleteEntry(playlistId: entry.playlistId, serverId: sid)
                     } catch {
                         if !(error is CancellationError) {
-                            currentToast = ShelveToast(message: tr("Could not delete playlist", "Playlist konnte nicht gelöscht werden"), isError: true)
+                            currentToast = ShelveToast(message: tr("Could not delete playlist", "Playlist konnte nicht gelöscht werden", "无法删除播放列表"), isError: true)
                         }
                     }
                 }
             }
-            Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+            Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
         } message: { entry in
             let type = RecapPeriod.PeriodType(rawValue: entry.periodType) ?? .week
             let period = RecapPeriod(
@@ -161,16 +161,16 @@ struct RecapView: View {
             Text(period.playlistName)
         }
         .alert(
-            tr("Delete Downloads?", "Downloads löschen?"),
+            tr("Delete Downloads?", "Downloads löschen?", "删除下载？"),
             isPresented: Binding(get: { entryToDeleteDownloads != nil }, set: { if !$0 { entryToDeleteDownloads = nil } }),
             presenting: entryToDeleteDownloads
         ) { entry in
-            Button(tr("Delete", "Löschen"), role: .destructive) {
+            Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                 deleteRecapDownloads(entry)
             }
-            Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+            Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
         } message: { _ in
-            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
         }
         .onAppear {
             if let first = enabledTypes.first, !enabledTypes.contains(segment) {
@@ -226,7 +226,7 @@ struct RecapView: View {
                             )
                     }
                 }
-                Text(tr("Top \(type.songLimit)", "Top \(type.songLimit)"))
+                Text(tr("Top \(type.songLimit)", "Top \(type.songLimit)", "前 \(type.songLimit) 首"))
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }
@@ -262,10 +262,10 @@ struct RecapView: View {
             Image(systemName: "chart.bar.xaxis")
                 .font(.system(size: 48))
                 .foregroundStyle(.quaternary)
-            Text(tr("Recap is disabled", "Recap ist deaktiviert"))
+            Text(tr("Recap is disabled", "Recap ist deaktiviert", "回顾已禁用"))
                 .font(.headline)
                 .foregroundStyle(.secondary)
-            Text(tr("Enable Recap in Settings to start tracking your listening history.", "Aktiviere Recap in den Einstellungen, um dein Hörverhalten aufzuzeichnen."))
+            Text(tr("Enable Recap in Settings to start tracking your listening history.", "Aktiviere Recap in den Einstellungen, um dein Hörverhalten aufzuzeichnen.", "在设置中启用回顾以开始记录您的收听历史。"))
                 .font(.subheadline)
                 .foregroundStyle(.secondary)
                 .multilineTextAlignment(.center)
@@ -310,7 +310,7 @@ struct RecapView: View {
               let songs = loaded.songs, !songs.isEmpty else { return }
         await MainActor.run {
             AudioPlayerService.shared.addToQueue(songs)
-            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+            currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
         }
     }
 
@@ -319,7 +319,7 @@ struct RecapView: View {
               let songs = loaded.songs, !songs.isEmpty else { return }
         await MainActor.run {
             AudioPlayerService.shared.addPlayNext(songs)
-            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+            currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
         }
     }
 
@@ -330,7 +330,7 @@ struct RecapView: View {
         if !missing.isEmpty { downloadStore.enqueueSongs(missing) }
         downloadStore.addOfflinePlaylist(entry.playlistId, songIds: songs.map(\.id))
         await MainActor.run {
-            currentToast = ShelveToast(message: tr("Download started", "Download gestartet"))
+            currentToast = ShelveToast(message: tr("Download started", "Download gestartet", "下载已开始"))
         }
     }
 
@@ -353,9 +353,9 @@ struct RecapView: View {
 extension RecapPeriod.PeriodType {
     var label: String {
         switch self {
-        case .week:  return tr("Weekly", "Wöchentlich")
-        case .month: return tr("Monthly", "Monatlich")
-        case .year:  return tr("Yearly", "Jährlich")
+        case .week:  return tr("Weekly", "Wöchentlich", "每周")
+        case .month: return tr("Monthly", "Monatlich", "每月")
+        case .year:  return tr("Yearly", "Jährlich", "每年")
         }
     }
 

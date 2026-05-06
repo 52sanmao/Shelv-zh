@@ -200,7 +200,7 @@ final class CarPlayRootController: NSObject {
     private func setupNowPlayingTemplate() {
         let nowPlaying = CPNowPlayingTemplate.shared
         nowPlaying.isUpNextButtonEnabled = true
-        nowPlaying.upNextTitle = tr("Queue", "Warteschlange")
+        nowPlaying.upNextTitle = tr("Queue", "Warteschlange", "播放队列")
         nowPlaying.add(self)
         updateNowPlayingButtons()
 

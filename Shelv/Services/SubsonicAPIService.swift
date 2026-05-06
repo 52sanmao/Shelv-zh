@@ -12,31 +12,31 @@ enum SubsonicAPIError: LocalizedError {
 
     var errorDescription: String? {
         switch self {
-        case .noServer:              return tr("No server configured", "Kein Server konfiguriert")
-        case .noPassword:            return tr("No password found", "Kein Passwort gefunden")
-        case .invalidURL:            return tr("Invalid server URL", "Ungültige Server-URL")
+        case .noServer:              return tr("No server configured", "Kein Server konfiguriert", "未配置服务器")
+        case .noPassword:            return tr("No password found", "Kein Passwort gefunden", "未找到密码")
+        case .invalidURL:            return tr("Invalid server URL", "Ungültige Server-URL", "服务器地址无效")
         case .networkError(let e):
             if let urlError = e as? URLError {
                 switch urlError.code {
                 case .timedOut:
-                    return tr("Connection timed out. Please check your network.", "Zeitüberschreitung. Bitte Netzwerkverbindung prüfen.")
+                    return tr("Connection timed out. Please check your network.", "Zeitüberschreitung. Bitte Netzwerkverbindung prüfen.", "连接超时，请检查网络。")
                 case .notConnectedToInternet:
-                    return tr("No internet connection.", "Keine Internetverbindung.")
+                    return tr("No internet connection.", "Keine Internetverbindung.", "无网络连接。")
                 case .cannotConnectToHost, .cannotFindHost:
-                    return tr("Server not reachable. Please check the URL.", "Server nicht erreichbar. Bitte URL prüfen.")
+                    return tr("Server not reachable. Please check the URL.", "Server nicht erreichbar. Bitte URL prüfen.", "服务器不可达，请检查地址。")
                 case .networkConnectionLost:
-                    return tr("Connection lost. Please try again.", "Verbindung verloren. Bitte erneut versuchen.")
+                    return tr("Connection lost. Please try again.", "Verbindung verloren. Bitte erneut versuchen.", "连接丢失，请重试。")
                 case .secureConnectionFailed:
-                    return tr("Secure connection failed. Please check the server certificate.", "Sichere Verbindung fehlgeschlagen. Bitte Serverzertifikat prüfen.")
+                    return tr("Secure connection failed. Please check the server certificate.", "Sichere Verbindung fehlgeschlagen. Bitte Serverzertifikat prüfen.", "安全连接失败，请检查服务器证书。")
                 default:
-                    return tr("Network error. Please try again.", "Netzwerkfehler. Bitte erneut versuchen.")
+                    return tr("Network error. Please try again.", "Netzwerkfehler. Bitte erneut versuchen.", "网络错误，请重试。")
                 }
             }
-            return tr("Network error. Please try again.", "Netzwerkfehler. Bitte erneut versuchen.")
+            return tr("Network error. Please try again.", "Netzwerkfehler. Bitte erneut versuchen.", "网络错误，请重试。")
         case .apiError(_, let m):
-            return m ?? tr("Server returned an error.", "Server hat einen Fehler zurückgegeben.")
+            return m ?? tr("Server returned an error.", "Server hat einen Fehler zurückgegeben.", "服务器返回错误。")
         case .decodingError:
-            return tr("Unexpected server response.", "Unerwartete Serverantwort.")
+            return tr("Unexpected server response.", "Unerwartete Serverantwort.", "服务器响应异常。")
         }
     }
 }

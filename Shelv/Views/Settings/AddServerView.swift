@@ -26,25 +26,25 @@ struct AddServerView: View {
     var body: some View {
         NavigationStack {
             Form {
-                Section(tr("Server", "Server")) {
-                    TextField(tr("Name (optional)", "Name (optional)"), text: $name)
+                Section(tr("Server", "Server", "服务器")) {
+                    TextField(tr("Name (optional)", "Name (optional)", "名称（可选）"), text: $name)
                         .focused($focusedField, equals: .name)
                         .autocorrectionDisabled()
 
-                    TextField(tr("URL (e.g. https://music.example.com)", "URL (z.B. https://musik.example.com)"), text: $baseURL)
+                    TextField(tr("URL (e.g. https://music.example.com)", "URL (z.B. https://musik.example.com)", "网址（如 https://music.example.com）"), text: $baseURL)
                         .focused($focusedField, equals: .url)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
                         .keyboardType(.URL)
                 }
 
-                Section(tr("Account", "Konto")) {
-                    TextField(tr("Username", "Benutzername"), text: $username)
+                Section(tr("Account", "Konto", "账户")) {
+                    TextField(tr("Username", "Benutzername", "用户名"), text: $username)
                         .focused($focusedField, equals: .username)
                         .autocorrectionDisabled()
                         .textInputAutocapitalization(.never)
 
-                    SecureField(tr("Password", "Passwort"), text: $password)
+                    SecureField(tr("Password", "Passwort", "密码"), text: $password)
                         .focused($focusedField, equals: .password)
                 }
 
@@ -59,7 +59,7 @@ struct AddServerView: View {
                                 Image(systemName: testSuccess ? "checkmark.circle.fill" : "network")
                                     .foregroundStyle(testSuccess ? .green : accentColor)
                             }
-                            Text(tr("Test Connection", "Verbindung testen"))
+                            Text(tr("Test Connection", "Verbindung testen", "测试连接"))
                                 .foregroundStyle(accentColor)
                         }
                     }
@@ -73,19 +73,19 @@ struct AddServerView: View {
                 }
             }
             .navigationTitle(isEditing
-                ? tr("Edit Server", "Server bearbeiten")
-                : tr("Add Server", "Server hinzufügen")
+                ? tr("Edit Server", "Server bearbeiten", "编辑服务器")
+                : tr("Add Server", "Server hinzufügen", "添加服务器")
             )
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(tr("Cancel", "Abbrechen")) { dismiss() }
+                    Button(tr("Cancel", "Abbrechen", "取消")) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
                     if isSaving {
                         ProgressView()
                     } else {
-                        Button(tr("Save", "Speichern")) { Task { await save() } }
+                        Button(tr("Save", "Speichern", "保存")) { Task { await save() } }
                             .disabled(!canSave)
                             .bold()
                     }
@@ -114,7 +114,7 @@ struct AddServerView: View {
         do {
             _ = try await SubsonicAPIService.shared.ping(server: tempServer, password: password)
             testSuccess = true
-            testResult = tr("Connection successful!", "Verbindung erfolgreich!")
+            testResult = tr("Connection successful!", "Verbindung erfolgreich!", "连接成功！")
         } catch {
             testResult = error.localizedDescription
         }

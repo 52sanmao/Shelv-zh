@@ -8,8 +8,8 @@ struct RecapDBLogView: View {
         case playLog, lyrics
         var label: String {
             switch self {
-            case .playLog: return tr("Play Log DB", "Play-Log-DB")
-            case .lyrics:  return tr("Lyrics DB", "Lyrics-DB")
+            case .playLog: return tr("Play Log DB", "Play-Log-DB", "播放日志数据库")
+            case .lyrics:  return tr("Lyrics DB", "Lyrics-DB", "歌词数据库")
             }
         }
     }
@@ -37,7 +37,7 @@ struct RecapDBLogView: View {
                     Image(systemName: "checkmark.circle")
                         .font(.largeTitle)
                         .foregroundStyle(.tertiary)
-                    Text(tr("No database errors.", "Keine Datenbank-Fehler."))
+                    Text(tr("No database errors.", "Keine Datenbank-Fehler.", "无数据库错误。"))
                         .foregroundStyle(.secondary)
                         .font(.subheadline)
                 }
@@ -59,7 +59,7 @@ struct RecapDBLogView: View {
                 }
             }
         }
-        .navigationTitle(tr("Database errors", "Datenbank-Fehler"))
+        .navigationTitle(tr("Database errors", "Datenbank-Fehler", "数据库错误"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

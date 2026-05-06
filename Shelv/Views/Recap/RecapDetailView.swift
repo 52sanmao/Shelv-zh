@@ -61,9 +61,9 @@ struct RecapDetailView: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             } else if songs.isEmpty {
                 ContentUnavailableView(
-                    tr("No Songs", "Keine Titel"),
+                    tr("No Songs", "Keine Titel", "暂无歌曲"),
                     systemImage: "music.note",
-                    description: Text(tr("No songs found for this period.", "Keine Titel für diesen Zeitraum gefunden."))
+                    description: Text(tr("No songs found for this period.", "Keine Titel für diesen Zeitraum gefunden.", "该时段暂无歌曲。"))
                 )
             } else {
                 List {
@@ -73,7 +73,7 @@ struct RecapDetailView: View {
                                 Button {
                                     player.play(songs: allSongs, startIndex: 0)
                                 } label: {
-                                    Label(tr("Play", "Abspielen"), systemImage: "play.fill")
+                                    Label(tr("Play", "Abspielen", "播放"), systemImage: "play.fill")
                                         .font(.body).bold()
                                         .foregroundStyle(.white)
                                         .frame(maxWidth: .infinity)
@@ -86,7 +86,7 @@ struct RecapDetailView: View {
                                 Button {
                                     player.playShuffled(songs: allSongs)
                                 } label: {
-                                    Label(tr("Shuffle", "Zufällig"), systemImage: "shuffle")
+                                    Label(tr("Shuffle", "Zufällig", "随机播放"), systemImage: "shuffle")
                                         .font(.body).bold()
                                         .foregroundStyle(accentColor)
                                         .frame(maxWidth: .infinity)
@@ -119,7 +119,7 @@ struct RecapDetailView: View {
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button {
                                     haptic(); player.addToQueue(songEntry.song)
-                                    currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                                    currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
                                 } label: {
                                     Image(systemName: "text.badge.plus")
                                 }
@@ -127,7 +127,7 @@ struct RecapDetailView: View {
 
                                 Button {
                                     haptic(); player.addPlayNext(songEntry.song)
-                                    currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                                    currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
                                 } label: {
                                     Image(systemName: "text.insert")
                                 }
@@ -172,14 +172,14 @@ struct RecapDetailView: View {
                     Button {
                         player.play(songs: allSongs, startIndex: 0)
                     } label: {
-                        Label(tr("Play", "Abspielen"), systemImage: "play.fill")
+                        Label(tr("Play", "Abspielen", "播放"), systemImage: "play.fill")
                     }
                     .disabled(songs.isEmpty)
 
                     Button {
                         player.playShuffled(songs: allSongs)
                     } label: {
-                        Label(tr("Shuffle", "Zufällig"), systemImage: "shuffle")
+                        Label(tr("Shuffle", "Zufällig", "随机播放"), systemImage: "shuffle")
                     }
                     .disabled(songs.isEmpty)
 
@@ -187,17 +187,17 @@ struct RecapDetailView: View {
 
                     Button {
                         player.addPlayNext(allSongs)
-                        currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt"))
+                        currentToast = ShelveToast(message: tr("Plays Next", "Wird als nächstes gespielt", "将下一个播放"))
                     } label: {
-                        Label(tr("Play Next", "Als nächstes"), systemImage: "text.insert")
+                        Label(tr("Play Next", "Als nächstes", "下一个播放"), systemImage: "text.insert")
                     }
                     .disabled(songs.isEmpty)
 
                     Button {
                         player.addToQueue(allSongs)
-                        currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt"))
+                        currentToast = ShelveToast(message: tr("Added to Queue", "Zur Warteschlange hinzugefügt", "已添加到播放队列"))
                     } label: {
-                        Label(tr("Add to Queue", "Zur Warteschlange"), systemImage: "text.badge.plus")
+                        Label(tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), systemImage: "text.badge.plus")
                     }
                     .disabled(songs.isEmpty)
 
@@ -206,7 +206,7 @@ struct RecapDetailView: View {
                     Button(role: .destructive) {
                         showDeleteRecapConfirm = true
                     } label: {
-                        Label(tr("Delete Recap", "Recap löschen"), systemImage: "trash")
+                        Label(tr("Delete Recap", "Recap löschen", "删除回顾"), systemImage: "trash")
                     }
                 } label: {
                     Image(systemName: "ellipsis.circle")
@@ -218,37 +218,37 @@ struct RecapDetailView: View {
         .task { await load() }
         .shelveToast($currentToast)
         .alert(
-            tr("Delete Downloads?", "Downloads löschen?"),
+            tr("Delete Downloads?", "Downloads löschen?", "删除下载？"),
             isPresented: $showDeleteDownloadConfirm
         ) {
-            Button(tr("Delete", "Löschen"), role: .destructive) {
+            Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                 for song in allSongs where downloadStore.isDownloaded(songId: song.id) {
                     downloadStore.deleteSong(song.id)
                 }
                 downloadStore.removeOfflinePlaylist(entry.playlistId)
-                currentToast = ShelveToast(message: tr("Downloads deleted", "Downloads gelöscht"))
+                currentToast = ShelveToast(message: tr("Downloads deleted", "Downloads gelöscht", "下载已删除"))
             }
-            Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+            Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
         } message: {
-            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt."))
+            Text(tr("The downloads will be removed from this device.", "Die Downloads werden von diesem Gerät entfernt.", "下载内容将从本设备删除。"))
         }
         .alert(
-            tr("Delete Recap?", "Recap löschen?"),
+            tr("Delete Recap?", "Recap löschen?", "删除回顾？"),
             isPresented: $showDeleteRecapConfirm
         ) {
-            Button(tr("Delete", "Löschen"), role: .destructive) {
+            Button(tr("Delete", "Löschen", "删除"), role: .destructive) {
                 Task {
                     do {
                         try await RecapStore.shared.deleteEntry(playlistId: entry.playlistId, serverId: serverId)
                         dismiss()
                     } catch {
                         if !(error is CancellationError) {
-                            currentToast = ShelveToast(message: tr("Could not delete recap", "Recap konnte nicht gelöscht werden"), isError: true)
+                            currentToast = ShelveToast(message: tr("Could not delete recap", "Recap konnte nicht gelöscht werden", "无法删除回顾"), isError: true)
                         }
                     }
                 }
             }
-            Button(tr("Cancel", "Abbrechen"), role: .cancel) {}
+            Button(tr("Cancel", "Abbrechen", "取消"), role: .cancel) {}
         } message: {
             Text(period.playlistName)
         }
@@ -338,9 +338,9 @@ struct RecapDetailView: View {
                     let missing = allSongs.filter { !downloadStore.isDownloaded(songId: $0.id) }
                     if !missing.isEmpty { downloadStore.enqueueSongs(missing) }
                     downloadStore.addOfflinePlaylist(entry.playlistId, songIds: allSongs.map(\.id))
-                    currentToast = ShelveToast(message: tr("Download started", "Download gestartet"))
+                    currentToast = ShelveToast(message: tr("Download started", "Download gestartet", "下载已开始"))
                 } label: {
-                    Label(tr("Download", "Herunterladen"), systemImage: "arrow.down.circle")
+                    Label(tr("Download", "Herunterladen", "下载"), systemImage: "arrow.down.circle")
                         .font(.subheadline).bold()
                         .foregroundStyle(accentColor)
                         .frame(maxWidth: .infinity)
@@ -355,7 +355,7 @@ struct RecapDetailView: View {
                     haptic()
                     showDeleteDownloadConfirm = true
                 } label: {
-                    Label(tr("Delete Downloads", "Downloads löschen"), systemImage: "arrow.down.circle")
+                    Label(tr("Delete Downloads", "Downloads löschen", "删除下载"), systemImage: "arrow.down.circle")
                         .font(.subheadline).bold()
                         .foregroundStyle(.red)
                         .frame(maxWidth: .infinity)
@@ -377,7 +377,7 @@ struct RecapDetailView: View {
         let playlistSongs: [Song]
         if offlineMode.isOffline {
             guard let playlist = await libraryStore.loadPlaylistDetail(id: entry.playlistId) else {
-                errorMessage = tr("Playlist could not be loaded.", "Playlist konnte nicht geladen werden.")
+                errorMessage = tr("Playlist could not be loaded.", "Playlist konnte nicht geladen werden.", "播放列表加载失败。")
                 return
             }
             playlistSongs = playlist.songs ?? []

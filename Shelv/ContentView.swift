@@ -27,24 +27,24 @@ struct ContentView: View {
             ZStack {
                 TabView(selection: $selectedTab) {
                     DiscoverView()
-                        .tabItem { Label(tr("Discover", "Entdecken"), systemImage: "sparkles") }
+                        .tabItem { Label(tr("Discover", "Entdecken", "发现"), systemImage: "sparkles") }
                         .tag(0)
                     LibraryView()
                         .tabItem {
                             if offlineMode.isOffline && enableDownloads {
-                                Label(tr("Downloads", "Downloads"), systemImage: "arrow.down.circle.fill")
+                                Label(tr("Downloads", "Downloads", "下载"), systemImage: "arrow.down.circle.fill")
                             } else {
-                                Label(tr("Library", "Bibliothek"), systemImage: "books.vertical.fill")
+                                Label(tr("Library", "Bibliothek", "曲库"), systemImage: "books.vertical.fill")
                             }
                         }
                         .tag(1)
                     if enablePlaylists {
                         PlaylistsView()
-                            .tabItem { Label(tr("Playlists", "Playlists"), systemImage: "music.note.list") }
+                            .tabItem { Label(tr("Playlists", "Playlists", "播放列表"), systemImage: "music.note.list") }
                             .tag(2)
                     }
                     SettingsView()
-                        .tabItem { Label(tr("Settings", "Einstellungen"), systemImage: "gearshape.fill") }
+                        .tabItem { Label(tr("Settings", "Einstellungen", "设置"), systemImage: "gearshape.fill") }
                         .tag(3)
                 }
                 .tint(accentColor)
@@ -102,7 +102,7 @@ struct ContentView: View {
             }
         }
         .onReceive(NotificationCenter.default.publisher(for: .offlinePlaybackBlocked)) { _ in
-            offlineToast = ShelveToast(message: tr("Not available offline", "Offline nicht verfügbar"), isError: true)
+            offlineToast = ShelveToast(message: tr("Not available offline", "Offline nicht verfügbar", "离线不可用"), isError: true)
         }
         .shelveToast($offlineToast)
         .onChange(of: serverStore.activeServerID) { _, _ in

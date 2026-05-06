@@ -16,14 +16,15 @@ struct TranscodingSettingsView: View {
             Section {
                 Text(tr(
                     "Choose format and bitrate the server should transcode to. \"Original\" requests the source file unchanged. If the server cannot transcode, the original is returned.",
-                    "Wähle Format und Bitrate die der Server liefern soll. „Original\u{201C} lädt unverändert. Wenn der Server das Format nicht liefert, kommt die Originaldatei zurück."
+                    "Wähle Format und Bitrate die der Server liefern soll. „Original\u{201C} lädt unverändert. Wenn der Server das Format nicht liefert, kommt die Originaldatei zurück.",
+                    "选择服务器转码的格式和比特率。\"原始\"表示不改变源文件。如果服务器不支持转码，则返回原始文件。"
                 ))
                 .font(.caption)
                 .foregroundStyle(.secondary)
             }
 
             transcodingSection(
-                title: tr("WiFi", "WLAN"),
+                title: tr("WiFi", "WLAN", "无线网络"),
                 icon: "wifi",
                 codecBinding: $wifiCodecRaw,
                 bitrateBinding: $wifiBitrate,
@@ -31,7 +32,7 @@ struct TranscodingSettingsView: View {
             )
 
             transcodingSection(
-                title: tr("Cellular", "Mobilfunk"),
+                title: tr("Cellular", "Mobilfunk", "蜂窝网络"),
                 icon: "antenna.radiowaves.left.and.right",
                 codecBinding: $cellularCodecRaw,
                 bitrateBinding: $cellularBitrate,
@@ -39,14 +40,14 @@ struct TranscodingSettingsView: View {
             )
 
             transcodingSection(
-                title: tr("Downloads", "Downloads"),
+                title: tr("Downloads", "Downloads", "下载"),
                 icon: "arrow.down.circle",
                 codecBinding: $downloadCodecRaw,
                 bitrateBinding: $downloadBitrate,
                 options: TranscodingCodec.downloadOptions
             )
         }
-        .navigationTitle(tr("Transcoding", "Transcoding"))
+        .navigationTitle(tr("Transcoding", "Transcoding", "转码"))
         .navigationBarTitleDisplayMode(.inline)
         .tint(accentColor)
     }
@@ -63,7 +64,7 @@ struct TranscodingSettingsView: View {
                     Text(c.label).tag(c.rawValue)
                 }
             } label: {
-                Label { Text(tr("Format", "Format")) } icon: {
+                Label { Text(tr("Format", "Format", "格式")) } icon: {
                     Image(systemName: icon).foregroundStyle(accentColor)
                 }
             }
@@ -73,7 +74,7 @@ struct TranscodingSettingsView: View {
                         Text(b.label).tag(b.rawValue)
                     }
                 } label: {
-                    Label { Text(tr("Bitrate", "Bitrate")) } icon: {
+                    Label { Text(tr("Bitrate", "Bitrate", "比特率")) } icon: {
                         Image(systemName: "speedometer").foregroundStyle(accentColor)
                     }
                 }

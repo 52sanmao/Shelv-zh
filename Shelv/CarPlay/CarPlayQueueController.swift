@@ -10,7 +10,7 @@ final class CarPlayQueueController {
     private var lastSongIds: [String] = []
 
     init() {
-        let t = CPListTemplate(title: tr("Queue", "Warteschlange"), sections: [])
+        let t = CPListTemplate(title: tr("Queue", "Warteschlange", "播放队列"), sections: [])
         t.tabImage = UIImage(systemName: "list.number")
         rootTemplate = t
     }
@@ -88,7 +88,7 @@ final class CarPlayQueueController {
                     register(item, coverArt: song.coverArt)
                     return item
                 }
-                sections.append(CPListSection(items: items, header: tr("Shuffled Queue", "Gemischte Warteschlange"), sectionIndexTitle: nil))
+                sections.append(CPListSection(items: items, header: tr("Shuffled Queue", "Gemischte Warteschlange", "已随机排列"), sectionIndexTitle: nil))
             }
         } else {
             if !player.playNextQueue.isEmpty {
@@ -100,7 +100,7 @@ final class CarPlayQueueController {
                     register(item, coverArt: song.coverArt)
                     return item
                 }
-                sections.append(CPListSection(items: items, header: tr("Play Next", "Als nächstes"), sectionIndexTitle: nil))
+                sections.append(CPListSection(items: items, header: tr("Play Next", "Als nächstes", "下一个播放"), sectionIndexTitle: nil))
             }
 
             let albumQueue = albumQueueSongs()
@@ -118,7 +118,7 @@ final class CarPlayQueueController {
                     register(item, coverArt: song.coverArt)
                     return item
                 }
-                sections.append(CPListSection(items: items, header: tr("Up Next", "Nächste Titel"), sectionIndexTitle: nil))
+                sections.append(CPListSection(items: items, header: tr("Up Next", "Nächste Titel", "即将播放"), sectionIndexTitle: nil))
             }
 
             if !player.userQueue.isEmpty {
@@ -130,12 +130,12 @@ final class CarPlayQueueController {
                     register(item, coverArt: song.coverArt)
                     return item
                 }
-                sections.append(CPListSection(items: items, header: tr("Your Queue", "Deine Warteschlange"), sectionIndexTitle: nil))
+                sections.append(CPListSection(items: items, header: tr("Your Queue", "Deine Warteschlange", "播放队列"), sectionIndexTitle: nil))
             }
         }
 
         if sections.isEmpty {
-            let empty = CPListItem(text: tr("Queue is empty", "Warteschlange ist leer"), detailText: nil)
+            let empty = CPListItem(text: tr("Queue is empty", "Warteschlange ist leer", "播放队列为空"), detailText: nil)
             sections.append(CPListSection(items: [empty], header: nil, sectionIndexTitle: nil))
         }
         return (sections, itemsByCoverId)

@@ -34,17 +34,17 @@ struct ServerDetailView: View {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(alignment: .center) {
                         VStack(alignment: .leading, spacing: 4) {
-                            Text(tr("Full Scan", "Vollständiger Scan"))
+                            Text(tr("Full Scan", "Vollständiger Scan", "完整扫描"))
                                 .font(.headline)
                             if let lastSync {
                                 Text(
-                                    tr("Last sync: ", "Letzter Sync: ")
+                                    tr("Last sync: ", "Letzter Sync: ", "上次同步：")
                                     + lastSync.formatted(date: .abbreviated, time: .shortened)
                                 )
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                             } else {
-                                Text(tr("Never synced", "Noch nie synchronisiert"))
+                                Text(tr("Never synced", "Noch nie synchronisiert", "从未同步"))
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
@@ -61,7 +61,7 @@ struct ServerDetailView: View {
                     }
 
                     if isScanning {
-                        Text(tr("Scanning library…", "Bibliothek wird gescannt…"))
+                        Text(tr("Scanning library…", "Bibliothek wird gescannt…", "正在扫描曲库…"))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
@@ -69,7 +69,7 @@ struct ServerDetailView: View {
                     Button {
                         Task { await runFullScan() }
                     } label: {
-                        Text(tr("Start Full Scan", "Vollständig scannen"))
+                        Text(tr("Start Full Scan", "Vollständig scannen", "开始完整扫描"))
                             .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.borderedProminent)
@@ -88,25 +88,25 @@ struct ServerDetailView: View {
                 }
             }
 
-            Section(tr("Library", "Bibliothek")) {
+            Section(tr("Library", "Bibliothek", "曲库")) {
                 infoRow(
                     icon: "square.stack",
-                    label: tr("Albums", "Alben"),
+                    label: tr("Albums", "Alben", "张专辑"),
                     value: storedAlbumCount > 0 ? "\(storedAlbumCount)" : (libraryStore.albums.isEmpty ? "—" : "\(libraryStore.albums.count)")
                 )
                 infoRow(
                     icon: "music.mic",
-                    label: tr("Artists", "Künstler"),
+                    label: tr("Artists", "Künstler", "位艺术家"),
                     value: storedArtistCount > 0 ? "\(storedArtistCount)" : (libraryStore.artists.isEmpty ? "—" : "\(libraryStore.artists.count)")
                 )
                 infoRow(
                     icon: "music.note",
-                    label: tr("Tracks", "Titel"),
+                    label: tr("Tracks", "Titel", "曲目"),
                     value: storedSongCount > 0 ? "\(storedSongCount)" : "—"
                 )
             }
 
-            Section(tr("Server", "Server")) {
+            Section(tr("Server", "Server", "服务器")) {
                 infoRow(
                     icon: "cpu",
                     label: "Navidrome",
@@ -114,7 +114,7 @@ struct ServerDetailView: View {
                 )
                 infoRow(
                     icon: "antenna.radiowaves.left.and.right",
-                    label: tr("API Version", "API-Version"),
+                    label: tr("API Version", "API-Version", "API 版本"),
                     value: serverInfo?.apiVersion ?? "—"
                 )
             }
@@ -167,7 +167,7 @@ struct ServerDetailView: View {
                 attempts += 1
             }
             if attempts >= maxAttempts {
-                throw SubsonicAPIError.apiError(0, tr("Scan timed out after 2 minutes.", "Scan nach 2 Minuten abgebrochen."))
+                throw SubsonicAPIError.apiError(0, tr("Scan timed out after 2 minutes.", "Scan nach 2 Minuten abgebrochen.", "扫描超时（已超过2分钟）。"))
             }
             await withTaskGroup(of: Void.self) { group in
                 group.addTask { await libraryStore.loadAlbums() }

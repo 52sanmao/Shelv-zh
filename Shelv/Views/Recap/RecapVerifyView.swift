@@ -21,19 +21,16 @@ struct RecapVerifyView: View {
                 if isLoading {
                     VStack(spacing: 12) {
                         ProgressView()
-                        Text(tr("Checking playlists…", "Playlists werden geprüft…"))
+                        Text(tr("Checking playlists…", "Playlists werden geprüft…", "正在检查播放列表…"))
                             .font(.subheadline)
                             .foregroundStyle(.secondary)
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else if diffs.isEmpty {
                     ContentUnavailableView(
-                        tr("All in sync", "Alles synchron"),
+                        tr("All in sync", "Alles synchron", "全部同步"),
                         systemImage: "checkmark.seal",
-                        description: Text(tr(
-                            "All recap playlists match the database.",
-                            "Alle Recap-Playlists entsprechen der Datenbank."
-                        ))
+                        description: Text(tr("All recap playlists match the database.", "Alle Recap-Playlists entsprechen der Datenbank.", "所有回顾播放列表与数据库一致。"))
                     )
                 } else {
                     List {
@@ -45,12 +42,12 @@ struct RecapVerifyView: View {
                     .scrollIndicators(.hidden)
                 }
             }
-            .navigationTitle(tr("Sync", "Abgleich"))
+            .navigationTitle(tr("Sync", "Abgleich", "同步"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     if !isImportContext || diffs.isEmpty {
-                        Button(tr("Done", "Fertig")) {
+                        Button(tr("Done", "Fertig", "完成")) {
                             completedByButton = true
                             if isImportContext {
                                 Task { await recapStore.completeImport() }
@@ -80,15 +77,14 @@ struct RecapVerifyView: View {
                 HStack(spacing: 10) {
                     Image(systemName: "exclamationmark.triangle")
                         .foregroundStyle(.orange)
-                    Text(tr("Playlist not found on server", "Playlist existiert nicht auf dem Server"))
+                    Text(tr("Playlist not found on server", "Playlist existiert nicht auf dem Server", "服务器上未找到播放列表"))
                         .font(.subheadline)
                     Spacer()
                 }
                 .padding(.vertical, 4)
 
                 diffGroup(
-                    label: tr("Songs to add (\(diff.expectedOrder.count))",
-                              "Songs zum Hinzufügen (\(diff.expectedOrder.count))"),
+                    label: tr("Songs to add (\(diff.expectedOrder.count))", "Songs zum Hinzufügen (\(diff.expectedOrder.count))", "待添加歌曲 (\(diff.expectedOrder.count))"),
                     icon: "plus.circle",
                     tint: .green,
                     songs: diff.expectedOrder
@@ -98,7 +94,7 @@ struct RecapVerifyView: View {
                     metadataRow(
                         icon: "pencil",
                         tint: .blue,
-                        title: tr("Name will change", "Name wird geändert"),
+                        title: tr("Name will change", "Name wird geändert", "名称将更改"),
                         detail: "\"\(diff.currentName)\" → \"\(diff.playlistName)\""
                     )
                 }
@@ -107,15 +103,14 @@ struct RecapVerifyView: View {
                     metadataRow(
                         icon: "text.quote",
                         tint: .blue,
-                        title: tr("Comment will be added", "Kommentar wird ergänzt"),
+                        title: tr("Comment will be added", "Kommentar wird ergänzt", "备注将被添加"),
                         detail: diff.currentComment.map { "\"\($0)\" → \"Shelv Recap\"" } ?? "\"Shelv Recap\""
                     )
                 }
 
                 if !diff.missingSongs.isEmpty {
                     diffGroup(
-                        label: tr("Missing songs (\(diff.missingSongs.count))",
-                                  "Fehlende Songs (\(diff.missingSongs.count))"),
+                        label: tr("Missing songs (\(diff.missingSongs.count))", "Fehlende Songs (\(diff.missingSongs.count))", "缺失歌曲 (\(diff.missingSongs.count))"),
                         icon: "plus.circle",
                         tint: .green,
                         songs: diff.missingSongs
@@ -124,8 +119,7 @@ struct RecapVerifyView: View {
 
                 if !diff.extraSongs.isEmpty {
                     diffGroup(
-                        label: tr("Extra songs (\(diff.extraSongs.count))",
-                                  "Zusätzliche Songs (\(diff.extraSongs.count))"),
+                        label: tr("Extra songs (\(diff.extraSongs.count))", "Zusätzliche Songs (\(diff.extraSongs.count))", "多余歌曲 (\(diff.extraSongs.count))"),
                         icon: "minus.circle",
                         tint: .red,
                         songs: diff.extraSongs
@@ -136,7 +130,7 @@ struct RecapVerifyView: View {
                     HStack(spacing: 10) {
                         Image(systemName: "arrow.up.arrow.down.circle")
                             .foregroundStyle(.orange)
-                        Text(tr("Order has changed", "Reihenfolge wurde geändert"))
+                        Text(tr("Order has changed", "Reihenfolge wurde geändert", "排序已更改"))
                             .font(.subheadline)
                         Spacer()
                     }
@@ -149,7 +143,7 @@ struct RecapVerifyView: View {
                     Button {
                         apply(diff, decision: .update)
                     } label: {
-                        Label(tr("Apply", "Übernehmen"), systemImage: "checkmark")
+                        Label(tr("Apply", "Übernehmen", "应用"), systemImage: "checkmark")
                             .frame(maxWidth: .infinity)
                             .padding(.vertical, 8)
                             .background(accentColor)
@@ -163,7 +157,7 @@ struct RecapVerifyView: View {
                 Button {
                     apply(diff, decision: .createNew)
                 } label: {
-                    Label(tr("Create new", "Neu erstellen"), systemImage: "plus.rectangle.on.rectangle")
+                    Label(tr("Create new", "Neu erstellen", "新建"), systemImage: "plus.rectangle.on.rectangle")
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 8)
                         .background(diff.serverMissing ? accentColor : Color(.tertiarySystemBackground))
@@ -178,7 +172,7 @@ struct RecapVerifyView: View {
             if processingDiffId == diff.id {
                 HStack {
                     ProgressView()
-                    Text(tr("Applying…", "Wird angewendet…"))
+                    Text(tr("Applying…", "Wird angewendet…", "正在应用…"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -251,8 +245,8 @@ struct RecapVerifyView: View {
                 try await recapStore.applyDiff(diff, decision: decision, serverId: serverId)
                 diffs.removeAll { $0.id == diff.id }
                 toast = ShelveToast(message: decision == .update
-                    ? tr("Playlist updated", "Playlist aktualisiert")
-                    : tr("New playlist created", "Neue Playlist erstellt"))
+                    ? tr("Playlist updated", "Playlist aktualisiert", "播放列表已更新")
+                    : tr("New playlist created", "Neue Playlist erstellt", "新播放列表已创建"))
             } catch {
                 toast = ShelveToast(message: error.localizedDescription, isError: true)
             }

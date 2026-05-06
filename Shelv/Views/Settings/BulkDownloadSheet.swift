@@ -21,20 +21,20 @@ struct BulkDownloadSheet: View {
                 if let plan {
                     planDetails(plan)
                 } else if isPlanning {
-                    ProgressView(tr("Calculating…", "Berechne…"))
+                    ProgressView(tr("Calculating…", "Berechne…", "计算中…"))
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 } else {
                     ProgressView().frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .navigationTitle(tr("Download Everything", "Alles herunterladen"))
+            .navigationTitle(tr("Download Everything", "Alles herunterladen", "下载全部"))
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(tr("Cancel", "Abbrechen")) { dismiss() }
+                    Button(tr("Cancel", "Abbrechen", "取消")) { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(tr("Start", "Starten")) {
+                    Button(tr("Start", "Starten", "开始")) {
                         guard let plan else { return }
                         downloadStore.enqueueSongs(plan.planned)
                         dismiss()
@@ -51,21 +51,21 @@ struct BulkDownloadSheet: View {
         List {
             Section {
                 HStack {
-                    Text(tr("Songs to download", "Songs")).font(.subheadline)
+                    Text(tr("Songs to download", "Songs", "待下载歌曲")).font(.subheadline)
                     Spacer()
                     Text("\(plan.planned.count)")
                         .monospacedDigit()
                         .foregroundStyle(.secondary)
                 }
                 HStack {
-                    Text(tr("Estimated size", "Geschätzte Größe")).font(.subheadline)
+                    Text(tr("Estimated size", "Geschätzte Größe", "预计大小")).font(.subheadline)
                     Spacer()
                     Text(ByteCountFormatter.string(fromByteCount: plan.totalBytes, countStyle: .file))
                         .monospacedDigit()
                         .foregroundStyle(.secondary)
                 }
                 HStack {
-                    Text(tr("Storage limit", "Limit")).font(.subheadline)
+                    Text(tr("Storage limit", "Limit", "存储限制")).font(.subheadline)
                     Spacer()
                     Text(ByteCountFormatter.string(fromByteCount: plan.limitBytes, countStyle: .file))
                         .monospacedDigit()
@@ -73,7 +73,7 @@ struct BulkDownloadSheet: View {
                 }
                 if !plan.skipped.isEmpty {
                     HStack {
-                        Text(tr("Skipped (over limit)", "Übersprungen (über Limit)")).font(.subheadline)
+                        Text(tr("Skipped (over limit)", "Übersprungen (über Limit)", "已跳过（超出限制）")).font(.subheadline)
                         Spacer()
                         Text("\(plan.skipped.count)")
                             .monospacedDigit()
@@ -86,21 +86,22 @@ struct BulkDownloadSheet: View {
                 Section {
                     Text(tr(
                         "Nothing new fits in the configured storage limit.",
-                        "Es passt nichts Neues in das konfigurierte Speicher-Limit."
+                        "Es passt nichts Neues in das konfigurierte Speicher-Limit.",
+                        "没有新内容可以放入已配置的存储限制内。"
                     ))
                     .foregroundStyle(.secondary)
                 }
             } else {
-                Section(tr("Order", "Reihenfolge")) {
-                    Label(tr("Frequently played first", "Häufig gespielt zuerst"),
+                Section(tr("Order", "Reihenfolge", "排序")) {
+                    Label(tr("Frequently played first", "Häufig gespielt zuerst", "优先常听"),
                           systemImage: "chart.line.uptrend.xyaxis")
-                    Label(tr("Then recently played", "Dann kürzlich gespielt"),
+                    Label(tr("Then recently played", "Dann kürzlich gespielt", "然后最近播放"),
                           systemImage: "clock.arrow.circlepath")
                     if enableFavorites {
-                        Label(tr("Then favorites", "Dann Favoriten"),
+                        Label(tr("Then favorites", "Dann Favoriten", "然后收藏"),
                               systemImage: "heart")
                     }
-                    Label(tr("Then alphabetical by artist", "Dann alphabetisch"),
+                    Label(tr("Then alphabetical by artist", "Dann alphabetisch", "然后按艺术家排序"),
                           systemImage: "textformat")
                 }
                 .labelStyle(.titleAndIcon)

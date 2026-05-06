@@ -57,7 +57,7 @@ enum CarPlayNavigation {
             let template = CPListTemplate(
                 title: album.name,
                 sections: [CPListSection(items: [
-                    CPListItem(text: tr("Loading…", "Wird geladen…"), detailText: nil)
+                    CPListItem(text: tr("Loading…", "Wird geladen…", "加载中…"), detailText: nil)
                 ], header: nil, sectionIndexTitle: nil)]
             )
             safePush(template, on: ic)
@@ -94,28 +94,28 @@ enum CarPlayNavigation {
             let starred = LibraryStore.shared.isAlbumStarred(album)
 
             var actions: [(icon: String, label: String, handler: () -> Void)] = [
-                ("play.fill",   tr("Play",    "Abspielen"), {
+                ("play.fill",   tr("Play",    "Abspielen", "播放"), {
                     AudioPlayerService.shared.play(songs: songs, startIndex: 0)
                     presentNowPlaying(on: ic)
                     rebuildActionsAsync()
                 }),
-                ("shuffle",     tr("Shuffle", "Zufällig"), {
+                ("shuffle",     tr("Shuffle", "Zufällig", "随机播放"), {
                     AudioPlayerService.shared.playShuffled(songs: songs)
                     presentNowPlaying(on: ic)
                     rebuildActionsAsync()
                 }),
-                ("text.insert", tr("Play Next",    "Als Nächstes"), {
+                ("text.insert", tr("Play Next",    "Als Nächstes", "下一个播放"), {
                     AudioPlayerService.shared.addPlayNext(songs)
                     rebuildActionsAsync()
                 }),
-                ("text.append", tr("Add to Queue", "Zur Warteschlange"), {
+                ("text.append", tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), {
                     AudioPlayerService.shared.addToQueue(songs)
                     rebuildActionsAsync()
                 }),
             ]
             if enableFavorites {
                 let icon = starred ? "heart.fill" : "heart"
-                let label = starred ? tr("Unfavorite", "Favorit entfernen") : tr("Favorite", "Favorit")
+                let label = starred ? tr("Unfavorite", "Favorit entfernen", "取消收藏") : tr("Favorite", "Favorit", "收藏")
                 actions.append((icon, label, {
                     Task { await LibraryStore.shared.toggleStarAlbum(album) }
                 }))
@@ -126,7 +126,7 @@ enum CarPlayNavigation {
                 let candidate = LibraryStore.shared.artists.first { $0.id == artistId }
                     ?? DownloadStore.shared.artists.first { $0.artistId == artistId }?.asArtist()
                 if let artist = candidate {
-                    let row = CPListItem(text: tr("View Artist", "Zum Künstler"), detailText: artist.name)
+                    let row = CPListItem(text: tr("View Artist", "Zum Künstler", "查看艺术家"), detailText: artist.name)
                     row.accessoryType = .disclosureIndicator
                     row.handler = { _, c in c(); openArtist(artist, from: ic) }
                     items.append(row)
@@ -149,7 +149,7 @@ enum CarPlayNavigation {
                     }
                 }
             }
-            return CPListSection(items: items, header: tr("Songs", "Titel"), sectionIndexTitle: nil)
+            return CPListSection(items: items, header: tr("Songs", "Titel", "歌曲"), sectionIndexTitle: nil)
         }
         template.updateSections([makeActionsSection(), makeSongsSection()])
 
@@ -185,7 +185,7 @@ enum CarPlayNavigation {
             let template = CPListTemplate(
                 title: artist.name,
                 sections: [CPListSection(items: [
-                    CPListItem(text: tr("Loading…", "Wird geladen…"), detailText: nil)
+                    CPListItem(text: tr("Loading…", "Wird geladen…", "加载中…"), detailText: nil)
                 ], header: nil, sectionIndexTitle: nil)]
             )
             safePush(template, on: ic)
@@ -235,14 +235,14 @@ enum CarPlayNavigation {
             }
 
             var actions: [(icon: String, label: String, handler: () -> Void)] = [
-                ("play.fill",   tr("Play",         "Abspielen"),         playAction({ AudioPlayerService.shared.play(songs: $0, startIndex: 0) }, navigateToPlayer: true)),
-                ("shuffle",     tr("Shuffle",      "Zufällig"),          playAction({ AudioPlayerService.shared.playShuffled(songs: $0) }, navigateToPlayer: true)),
-                ("text.insert", tr("Play Next",    "Als Nächstes"),      playAction({ AudioPlayerService.shared.addPlayNext($0) })),
-                ("text.append", tr("Add to Queue", "Zur Warteschlange"), playAction({ AudioPlayerService.shared.addToQueue($0) })),
+                ("play.fill",   tr("Play",         "Abspielen", "播放"),         playAction({ AudioPlayerService.shared.play(songs: $0, startIndex: 0) }, navigateToPlayer: true)),
+                ("shuffle",     tr("Shuffle",      "Zufällig", "随机播放"),          playAction({ AudioPlayerService.shared.playShuffled(songs: $0) }, navigateToPlayer: true)),
+                ("text.insert", tr("Play Next",    "Als Nächstes", "下一个播放"),      playAction({ AudioPlayerService.shared.addPlayNext($0) })),
+                ("text.append", tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), playAction({ AudioPlayerService.shared.addToQueue($0) })),
             ]
             if enableFavorites {
                 let icon = starred ? "heart.fill" : "heart"
-                let label = starred ? tr("Unfavorite", "Favorit entfernen") : tr("Favorite", "Favorit")
+                let label = starred ? tr("Unfavorite", "Favorit entfernen", "取消收藏") : tr("Favorite", "Favorit", "收藏")
                 actions.append((icon, label, {
                     Task { await LibraryStore.shared.toggleStarArtist(artist) }
                 }))
@@ -270,7 +270,7 @@ enum CarPlayNavigation {
                 if let id = album.coverArt { coverMap[id, default: []].append(item) }
                 return item
             }
-            return (CPListSection(items: items, header: tr("Albums", "Alben"), sectionIndexTitle: nil), coverMap)
+            return (CPListSection(items: items, header: tr("Albums", "Alben", "专辑"), sectionIndexTitle: nil), coverMap)
         }
 
         let (albumsSection, initialCoverMap) = makeAlbumsSection()
@@ -312,7 +312,7 @@ enum CarPlayNavigation {
             let template = CPListTemplate(
                 title: playlist.name,
                 sections: [CPListSection(items: [
-                    CPListItem(text: tr("Loading…", "Wird geladen…"), detailText: nil)
+                    CPListItem(text: tr("Loading…", "Wird geladen…", "加载中…"), detailText: nil)
                 ], header: nil, sectionIndexTitle: nil)]
             )
             safePush(template, on: ic)
@@ -340,21 +340,21 @@ enum CarPlayNavigation {
 
         func makeActionsSection() -> CPListSection {
             let actions: [(icon: String, label: String, handler: () -> Void)] = [
-                ("play.fill",   tr("Play",    "Abspielen"), {
+                ("play.fill",   tr("Play",    "Abspielen", "播放"), {
                     AudioPlayerService.shared.play(songs: songs, startIndex: 0)
                     presentNowPlaying(on: ic)
                     rebuildActionsAsync()
                 }),
-                ("shuffle",     tr("Shuffle", "Zufällig"), {
+                ("shuffle",     tr("Shuffle", "Zufällig", "随机播放"), {
                     AudioPlayerService.shared.playShuffled(songs: songs)
                     presentNowPlaying(on: ic)
                     rebuildActionsAsync()
                 }),
-                ("text.insert", tr("Play Next",    "Als Nächstes"), {
+                ("text.insert", tr("Play Next",    "Als Nächstes", "下一个播放"), {
                     AudioPlayerService.shared.addPlayNext(songs)
                     rebuildActionsAsync()
                 }),
-                ("text.append", tr("Add to Queue", "Zur Warteschlange"), {
+                ("text.append", tr("Add to Queue", "Zur Warteschlange", "添加到播放队列"), {
                     AudioPlayerService.shared.addToQueue(songs)
                     rebuildActionsAsync()
                 }),
@@ -381,7 +381,7 @@ enum CarPlayNavigation {
                 if let id = song.coverArt { coverMap[id, default: []].append(item) }
                 return item
             }
-            return (CPListSection(items: items, header: tr("Songs", "Titel"), sectionIndexTitle: nil), coverMap)
+            return (CPListSection(items: items, header: tr("Songs", "Titel", "歌曲"), sectionIndexTitle: nil), coverMap)
         }
 
         let (songsSection, initialCoverMap) = makeSongsSection()

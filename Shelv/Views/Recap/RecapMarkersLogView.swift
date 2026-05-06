@@ -47,7 +47,7 @@ struct RecapMarkersLogView: View {
         List {
             Section {
                 if weekly.isEmpty {
-                    Text(tr("Loading…", "Lade…"))
+                    Text(tr("Loading…", "Lade…", "加载中…"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 } else {
@@ -56,15 +56,12 @@ struct RecapMarkersLogView: View {
                     }
                 }
             } header: {
-                Text(tr("Weekly — last 4 weeks", "Wöchentlich — letzte 4 Wochen"))
+                Text(tr("Weekly — last 4 weeks", "Wöchentlich — letzte 4 Wochen", "每周——最近4周"))
             } footer: {
-                Text(tr(
-                    "A week is marked ✓ processed when generate() succeeds. An unprocessed week will be retried on next app start.",
-                    "Eine Woche wird ✓ markiert, sobald generate() erfolgreich war. Nicht markierte Wochen werden beim nächsten App-Start erneut versucht."
-                ))
+                Text(tr("A week is marked ✓ processed when generate() succeeds. An unprocessed week will be retried on next app start.", "Eine Woche wird ✓ markiert, sobald generate() erfolgreich war. Nicht markierte Wochen werden beim nächsten App-Start erneut versucht.", "当 generate() 成功时，该周标记为 ✓ 已处理。未处理的周将在下次启动时重试。"))
             }
 
-            Section(tr("Monthly — last month", "Monatlich — letzter Monat")) {
+            Section(tr("Monthly — last month", "Monatlich — letzter Monat", "每月——上个月")) {
                 if let m = monthly {
                     row(status: m)
                 } else {
@@ -72,7 +69,7 @@ struct RecapMarkersLogView: View {
                 }
             }
 
-            Section(tr("Yearly — last year", "Jährlich — letztes Jahr")) {
+            Section(tr("Yearly — last year", "Jährlich — letztes Jahr", "每年——去年")) {
                 if let y = yearly {
                     row(status: y)
                 } else {
@@ -85,7 +82,7 @@ struct RecapMarkersLogView: View {
                 .listRowBackground(Color.clear)
                 .listRowSeparator(.hidden)
         }
-        .navigationTitle(tr("Auto-gen markers", "Auto-Gen-Marker"))
+        .navigationTitle(tr("Auto-gen markers", "Auto-Gen-Marker", "自动生成标记"))
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
@@ -115,33 +112,30 @@ struct RecapMarkersLogView: View {
                     .foregroundStyle(.secondary)
             }
             HStack(spacing: 12) {
-                Text(tr("Marker:", "Marker:")).foregroundStyle(.secondary)
-                Text(status.processed ? tr("set", "gesetzt") : tr("not set", "nicht gesetzt"))
+                Text(tr("Marker:", "Marker:", "标记：")).foregroundStyle(.secondary)
+                Text(status.processed ? tr("set", "gesetzt", "已设置") : tr("not set", "nicht gesetzt", "未设置"))
                     .foregroundStyle(status.processed ? .green : .secondary)
                 Text("·").foregroundStyle(.secondary)
-                Text(tr("Playlist:", "Playlist:")).foregroundStyle(.secondary)
-                Text(status.entryExists ? tr("exists", "vorhanden") : tr("missing", "fehlt"))
+                Text(tr("Playlist:", "Playlist:", "播放列表：")).foregroundStyle(.secondary)
+                Text(status.entryExists ? tr("exists", "vorhanden", "存在") : tr("missing", "fehlt", "缺失"))
                     .foregroundStyle(status.entryExists ? accentColor : .secondary)
                 Text("·").foregroundStyle(.secondary)
-                Text(tr("Plays:", "Plays:")).foregroundStyle(.secondary)
+                Text(tr("Plays:", "Plays:", "播放次数：")).foregroundStyle(.secondary)
                 Text("\(status.plays)")
                     .foregroundStyle(status.plays > 0 ? .primary : .secondary)
             }
             .font(.caption)
 
             if !status.processed && status.plays == 0 {
-                Text(tr("Will retry on next app start (no plays yet).",
-                        "Wird beim nächsten App-Start erneut versucht (keine Plays)."))
+                Text(tr("Will retry on next app start (no plays yet).", "Wird beim nächsten App-Start erneut versucht (keine Plays).", "将在下次启动时重试（暂无播放记录）。"))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             } else if !status.processed && status.plays > 0 && !status.entryExists {
-                Text(tr("Pending generation on next app start.",
-                        "Wartet auf Generierung beim nächsten App-Start."))
+                Text(tr("Pending generation on next app start.", "Wartet auf Generierung beim nächsten App-Start.", "等待下次启动时生成。"))
                     .font(.caption2)
                     .foregroundStyle(.orange)
             } else if status.processed && !status.entryExists {
-                Text(tr("Processed, playlist deleted — will not regenerate.",
-                        "Markiert, Playlist gelöscht — wird nicht regeneriert."))
+                Text(tr("Processed, playlist deleted — will not regenerate.", "Markiert, Playlist gelöscht — wird nicht regeneriert.", "已处理，播放列表已删除——不会重新生成。"))
                     .font(.caption2)
                     .foregroundStyle(.secondary)
             }

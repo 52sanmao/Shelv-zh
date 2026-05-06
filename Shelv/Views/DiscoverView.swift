@@ -42,7 +42,7 @@ struct DiscoverView: View {
                                 Button {
                                     offlineMode.enterOfflineMode()
                                 } label: {
-                                    Label(tr("Go Offline", "Offline gehen"), systemImage: "wifi.slash")
+                                    Label(tr("Go Offline", "Offline gehen", "进入离线模式"), systemImage: "wifi.slash")
                                         .font(.subheadline.bold())
                                         .padding(.horizontal, 24)
                                         .padding(.vertical, 10)
@@ -57,19 +57,19 @@ struct DiscoverView: View {
                     } else {
                         VStack(spacing: 12) {
                             mixButton(
-                                title: tr("Mix: Newest Tracks", "Mix: Neueste Titel"),
+                                title: tr("Mix: Newest Tracks", "Mix: Neueste Titel", "混播：最新曲目"),
                                 icon: "sparkles",
                                 key: "newest"
                             ) { await loadMix(type: "newest") }
 
                             mixButton(
-                                title: tr("Mix: Frequently Played", "Mix: Häufig gespielt"),
+                                title: tr("Mix: Frequently Played", "Mix: Häufig gespielt", "混播：常听曲目"),
                                 icon: "chart.bar.fill",
                                 key: "frequent"
                             ) { await loadMix(type: "frequent") }
 
                             mixButton(
-                                title: tr("Mix: Recently Played", "Mix: Kürzlich gespielt"),
+                                title: tr("Mix: Recently Played", "Mix: Kürzlich gespielt", "混播：最近播放"),
                                 icon: "clock.fill",
                                 key: "recent"
                             ) { await loadMix(type: "recent") }
@@ -77,15 +77,15 @@ struct DiscoverView: View {
                         .padding(.horizontal)
 
                         albumSection(
-                            title: tr("Recently Added", "Kürzlich hinzugefügt"),
+                            title: tr("Recently Added", "Kürzlich hinzugefügt", "最近添加"),
                             albums: libraryStore.recentlyAdded
                         )
                         albumSection(
-                            title: tr("Recently Played", "Kürzlich gespielt"),
+                            title: tr("Recently Played", "Kürzlich gespielt", "最近播放"),
                             albums: libraryStore.recentlyPlayed
                         )
                         albumSection(
-                            title: tr("Frequently Played", "Häufig gespielt"),
+                            title: tr("Frequently Played", "Häufig gespielt", "常听曲目"),
                             albums: libraryStore.frequentlyPlayed
                         )
                         randomAlbumSection
@@ -179,8 +179,8 @@ struct DiscoverView: View {
                     Task { await libraryStore.loadDiscover() }
                 }
             }
-            .alert(tr("Error", "Fehler"), isPresented: $showError, presenting: errorMessage) { _ in
-                Button(tr("OK", "OK"), role: .cancel) {}
+            .alert(tr("Error", "Fehler", "错误"), isPresented: $showError, presenting: errorMessage) { _ in
+                Button(tr("OK", "OK", "好"), role: .cancel) {}
             } message: { msg in
                 Text(msg)
             }
@@ -193,11 +193,12 @@ struct DiscoverView: View {
             Image(systemName: "wifi.slash")
                 .font(.system(size: 56))
                 .foregroundStyle(.tertiary)
-            Text(tr("You are offline", "Du bist offline"))
+            Text(tr("You are offline", "Du bist offline", "当前处于离线模式"))
                 .font(.title3).bold()
             Text(tr(
                 "Downloads are still available. Tap the magnifying glass to search your library.",
-                "Downloads sind weiterhin verfügbar. Tippe auf die Lupe um in deiner Bibliothek zu suchen."
+                "Downloads sind weiterhin verfügbar. Tippe auf die Lupe um in deiner Bibliothek zu suchen.",
+                "下载内容仍然可用。点击搜索图标以搜索曲库。"
             ))
             .font(.subheadline)
             .foregroundStyle(.secondary)
@@ -206,7 +207,7 @@ struct DiscoverView: View {
             Button {
                 offlineMode.exitOfflineMode()
             } label: {
-                Label(tr("Go Online", "Online gehen"), systemImage: "wifi")
+                Label(tr("Go Online", "Online gehen", "恢复在线"), systemImage: "wifi")
                     .font(.subheadline.bold())
                     .padding(.horizontal, 24)
                     .padding(.vertical, 10)
@@ -222,7 +223,7 @@ struct DiscoverView: View {
 
     @ViewBuilder
     private var randomAlbumSection: some View {
-        albumSection(title: tr("Random Albums", "Zufällige Alben"), albums: libraryStore.randomAlbums) {
+        albumSection(title: tr("Random Albums", "Zufällige Alben", "随机专辑"), albums: libraryStore.randomAlbums) {
             Button {
                 randomRefreshing = true
                 Task {
