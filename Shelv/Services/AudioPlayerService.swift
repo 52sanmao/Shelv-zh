@@ -241,11 +241,19 @@ class AudioPlayerService: ObservableObject {
 
     private func setupAudioSession() {
         do {
+            #if compiler(>=6.2)
             try AVAudioSession.sharedInstance().setCategory(
                 .playback,
                 mode: .default,
                 options: [.allowAirPlay, .allowBluetoothHFP]
             )
+            #else
+            try AVAudioSession.sharedInstance().setCategory(
+                .playback,
+                mode: .default,
+                options: [.allowAirPlay, .allowBluetooth]
+            )
+            #endif
             try AVAudioSession.sharedInstance().setActive(true)
         } catch {
             print("[AudioSession] Failed to activate: \(error)")
@@ -436,7 +444,8 @@ class AudioPlayerService: ObservableObject {
            let local = LocalDownloadIndex.shared.url(songId: song.id, serverId: serverId) {
             return local
         }
-        guard !OfflineModeService.shared.isOffline else { return nil }
+        let offline = MainActor.assumeIsolated { OfflineModeService.shared.isOffline }
+        guard !offline else { return nil }
         return SubsonicAPIService.shared.streamURL(for: song.id)
     }
 
@@ -1242,7 +1251,7 @@ class AudioPlayerService: ObservableObject {
         if let artId = song.coverArt,
            let artURL = SubsonicAPIService.shared.coverArtURL(for: artId, size: 600) {
             let key = "\(artId)_600"
-            let isOffline = OfflineModeService.shared.isOffline
+            let isOffline = MainActor.assumeIsolated { OfflineModeService.shared.isOffline }
             artworkTask = Task { [weak self] in
                 var img: UIImage?
                 if Task.isCancelled { return }

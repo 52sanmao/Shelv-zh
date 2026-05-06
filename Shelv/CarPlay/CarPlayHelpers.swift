@@ -98,10 +98,12 @@ let cpPlaceholder: UIImage = {
 
 @MainActor
 func makeImageRowItem(text: String, images: [UIImage]) -> CPListImageRowItem {
+    #if compiler(>=6.2)
     if #available(iOS 26.0, *) {
         let elements = images.map { CPListImageRowItemGridElement(image: $0) }
         return CPListImageRowItem(text: text, gridElements: elements, allowsMultipleLines: false)
     }
+    #endif
     return CPListImageRowItem(text: text, images: images)
 }
 

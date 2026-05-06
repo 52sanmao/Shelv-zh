@@ -73,20 +73,28 @@ struct PlayerBarView: View {
 
 private struct LiquidGlassBar: ViewModifier {
     func body(content: Content) -> some View {
+        #if compiler(>=6.2)
         if #available(iOS 26.0, *) {
             content
                 .glassEffect(in: RoundedRectangle(cornerRadius: 32, style: .continuous))
         } else {
-            content
-                .background(
-                    .ultraThinMaterial,
-                    in: RoundedRectangle(cornerRadius: 32, style: .continuous)
-                )
-                .overlay(
-                    RoundedRectangle(cornerRadius: 32, style: .continuous)
-                        .stroke(Color.primary.opacity(0.10), lineWidth: 0.5)
-                )
-                .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
+            fallbackContent(content)
         }
+        #else
+        fallbackContent(content)
+        #endif
+    }
+
+    private func fallbackContent(_ content: Content) -> some View {
+        content
+            .background(
+                .ultraThinMaterial,
+                in: RoundedRectangle(cornerRadius: 32, style: .continuous)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 32, style: .continuous)
+                    .stroke(Color.primary.opacity(0.10), lineWidth: 0.5)
+            )
+            .shadow(color: .black.opacity(0.12), radius: 10, y: 4)
     }
 }
